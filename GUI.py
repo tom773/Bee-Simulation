@@ -1,6 +1,8 @@
 import tkinter as tk
+from tkinter import ttk
+import time
 
-LARGE_FONT= ("Verdana", 12)
+LARGE_FONT= ("Verdana", 20)
 
 
 class SeaOfBTCApp(tk.Tk):
@@ -17,7 +19,7 @@ class SeaOfBTCApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo):
+        for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour):
 
             frame = F(container, self)
 
@@ -40,40 +42,57 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+        label = tk.Label(self, text="BEE SIMULATION GAME!!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = tk.Button(self, text="Visit Page 69", command=lambda:controller.show_frame(PageOne))
+        button1 = ttk.Button(self, text="Press to start!", command=lambda:controller.show_frame(TutorialOne))
         button1.pack()
 
 
-class PageOne(tk.Frame):
+class TutorialOne(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Im inside of your mum", font=LARGE_FONT)
+        label = tk.Label(self, text="##############################################\n      "
+               "WELCOME TO THE BEE SIMULATION!!     \n"
+               "##############################################", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Back2Home", command=lambda:controller.show_frame(StartPage))
+        button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialTwo))
         button1.pack()
-        button2 = tk.Button(self, text="Page Two", command=lambda:controller.show_frame(PageTwo))
-        button2.pack()
 
 
-class PageTwo(tk.Frame):
+class TutorialTwo(tk.Frame):
     def __init__(self, parent, controller):
+        time.sleep(2)
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Im also inside of your mum", font=LARGE_FONT)
+        label = tk.Label(self, text='Before we begin, lets have a quick tutorial! \n\n'
+               'This simulation is designed to mimic that of the decline in real life, which is effecting us in ways '
+               'we can\'t understand today...\n ', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Back2Home", command=lambda:controller.show_frame(StartPage))
+        button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialThree))
         button1.pack()
-        button2 = tk.Button(self, text="Page One", command=lambda:controller.show_frame(PageOne))
-        button2.pack()
 
+class TutorialThree(tk.Frame):
+    def __init__(self, parent, controller):
+        time.sleep(2)
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text='As each day passes the bee population decreases further and further.\n '
+                                    'In our virtual world, '
+               'you make decicions each passing day\nabout what you want to do and how you use the '
+                                    'things you have'
+               ' access to\n', font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+        button1 = ttk.Button(self, text="Next", command=lambda: controller.show_frame(TutorialFour))
+        button1.pack()
 
-
-
-
-
-
+class TutorialFour(tk.Frame):
+    def __init__(self, parent, controller):
+        time.sleep(2)
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text='Based on those desicions, the bee population will decline / rise in number\n\n'
+                                    'Lets Begin!!!!', font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+        button1 = ttk.Button(self, text="Start Game", command=lambda: controller.show_frame(TutorialFour))
+        button1.pack()
 
 app = SeaOfBTCApp()
 app.mainloop()

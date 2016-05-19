@@ -4,7 +4,7 @@
 import time
 from urllib import request
 import matplotlib
-import threading
+import tkinter as tk
 
 
 class MainMenu:
@@ -70,6 +70,9 @@ class Algorithms():
 
         return self.rate
 
+    def fundingVirus(self):
+
+        pass
 
 class MainGame():
 
@@ -117,8 +120,6 @@ class MainGame():
 a = MainMenu()
 b = MainGame()
 c = Algorithms()
-a.menu()
-
 
 
 
