@@ -1,14 +1,47 @@
 import time
+
+class Algorithms():
+
+    rate = 1
+    def __init__(self):
+        with open('BeePopNumbers.txt', 'r') as pop:
+            pop = pop.read()
+            self.beePop = int(pop)
+
+    def tick(self):
+        self.beePop = self.beePop * self.rate
+
+        save()
+    def pesticde1(self, amountofpesticide):
+
+        if amountofpesticide is 0:
+
+            self.rate = self.rate + 0.02
+        elif amountofpesticide is 3:
+
+            self.rate = self.rate - 0.03
+
+        else:
+            self.rate1 = amountofpesticide * .02212332
+            self.rate = self.rate - self.rate1
+
+        return self.rate
+
+    def fundingVirus(self):
+
+        pass
+def save():
+    pass
+
 import tkinter as tk
 from tkinter import ttk
-import Bee_Main
-from Bee_Main import *
+
 
 LARGE_FONT= ("Verdana", 20)
 MEDIUM= ("Verdana", 16)
 
 
-class SeaOfBTCApp(tk.Tk):
+class BeeSimGui(tk.Tk):
 
     def __init__(self, *args, **kwargs):
 
@@ -105,22 +138,31 @@ class FirstDay(tk.Frame):
         button1.pack()
 
 
-class SecondLabel(tk.Frame):
+class SecondLabel(tk.Frame, Algorithms):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text='Well lay out some basic options first...', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
         label2 = tk.Label(self, text='Oh No! There are rats running rampant in your house. How many litres pesticide '
-                                      'do you use?\n 1. To Kill all and have no problems 2. To Kill half and '
+                                      'do you use?\n 1. To Kill none and have to stomp on them all 2. '
+                                     'To Kill half and '
                                       'stomp on a few or 3. Kill all and have no problems\n', font=MEDIUM)
         label2.pack()
         amount = tk.Entry(self)
         amount.pack()
-        button1 = ttk.Button(self, text="Enter", command=lambda: c.pesticde1(self, int(amount.get())))
+        button1 = ttk.Button(self, text="Enter", command=lambda: self.showLabel(amount, button1, label, label2))
         button1.pack()
 
+    def showLabel(self, amount, button1, label, label2):
+        amount1 = int(amount.get())
+        amount.destroy()
+        button1.destroy()
+        label.destroy()
+        label2.destroy()
+        label3 = tk.Label(self, text=Algorithms.pesticde1(self, amountofpesticide=amount1), font=LARGE_FONT)
+        label3.pack()
 
-c = Algorithms
-app = SeaOfBTCApp()
+
+app = BeeSimGui()
 app.mainloop()
 
