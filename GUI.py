@@ -1,8 +1,11 @@
+import time
 import tkinter as tk
 from tkinter import ttk
-import time
+import Bee_Main
+from Bee_Main import *
 
 LARGE_FONT= ("Verdana", 20)
+MEDIUM= ("Verdana", 16)
 
 
 class SeaOfBTCApp(tk.Tk):
@@ -19,7 +22,7 @@ class SeaOfBTCApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour):
+        for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel):
 
             frame = F(container, self)
 
@@ -33,9 +36,6 @@ class SeaOfBTCApp(tk.Tk):
 
         frame = self.frames[cont]
         frame.tkraise()
-
-def qf(param):
-    print(param)
 
 
 class StartPage(tk.Frame):
@@ -86,13 +86,41 @@ class TutorialThree(tk.Frame):
 
 class TutorialFour(tk.Frame):
     def __init__(self, parent, controller):
-        time.sleep(2)
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text='Based on those desicions, the bee population will decline / rise in number\n\n'
                                     'Lets Begin!!!!', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = ttk.Button(self, text="Start Game", command=lambda: controller.show_frame(TutorialFour))
+        button1 = ttk.Button(self, text="Start Game", command=lambda: controller.show_frame(FirstDay))
         button1.pack()
 
+class FirstDay(tk.Frame):
+
+    def __init__(self, parent, controller):
+
+        tk.Frame.__init__(self, parent)
+        label1 = tk.Label(self, text='Welcome to your first day. At this early in the game you will have a limited amount of options you can'
+              ' choose from...\n', font=LARGE_FONT)
+        label1.pack(pady=10, padx=10)
+        button1 = ttk.Button(self, text="Okay, Got It", command=lambda: controller.show_frame(SecondLabel))
+        button1.pack()
+
+
+class SecondLabel(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text='Well lay out some basic options first...', font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+        label2 = tk.Label(self, text='Oh No! There are rats running rampant in your house. How many litres pesticide '
+                                      'do you use?\n 1. To Kill all and have no problems 2. To Kill half and '
+                                      'stomp on a few or 3. Kill all and have no problems\n', font=MEDIUM)
+        label2.pack()
+        amount = tk.Entry(self)
+        amount.pack()
+        button1 = ttk.Button(self, text="Enter", command=lambda: c.pesticde1(self, int(amount.get())))
+        button1.pack()
+
+
+c = Algorithms
 app = SeaOfBTCApp()
 app.mainloop()
+
