@@ -1,45 +1,69 @@
 import time
 
+rate = 1
+
+with open('BeePopNumbers.txt', 'r') as pop:
+    pop = pop.read()
+    beePop = int(pop)
+
+
+def tick(self):
+    global beePop
+    beePop = beePop * rate
+    return beePop
+
+
 class Algorithms():
 
-    rate = 1
+    global rate
+
     def __init__(self):
-        with open('BeePopNumbers.txt', 'r') as pop:
-            pop = pop.read()
-            self.beePop = int(pop)
 
-    def tick(self):
-        self.beePop = self.beePop * self.rate
+        pass
 
-        save()
     def pesticde1(self, amountofpesticide):
+        global rate
 
         if amountofpesticide is 0:
 
-            self.rate = self.rate + 0.02
+            rate = rate + 0.02
         elif amountofpesticide is 3:
 
-            self.rate = self.rate - 0.03
+            rate = rate - 0.03
+
+        elif amountofpesticide is 1:
+
+            rate = rate - 0.002334
+        elif amountofpesticide is 2:
+
+            rate = rate - 0.0146923
 
         else:
-            self.rate1 = amountofpesticide * .02212332
-            self.rate = self.rate - self.rate1
+            return "Not a Valid Selection, Try Again"
 
-        return self.rate
+        return rate
 
     def fundingVirus(self):
 
         pass
-def save():
-    pass
+    def save(self):
+
+        with open('BeePopNumbers.txt', 'w') as pop:
+            pop = pop.write(beePop)
 
 import tkinter as tk
 from tkinter import ttk
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.figure import Figure
+from matplotlib import style
+import matplotlib.animation as animation
 
 
 LARGE_FONT= ("Verdana", 20)
 MEDIUM= ("Verdana", 16)
-
+style.use('ggplot')
 
 class BeeSimGui(tk.Tk):
 
@@ -55,7 +79,8 @@ class BeeSimGui(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel):
+        for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel,
+                  SecondDay):
 
             frame = F(container, self)
 
@@ -101,6 +126,31 @@ class TutorialTwo(tk.Frame):
                'This simulation is designed to mimic that of the decline in real life, which is effecting us in ways '
                'we can\'t understand today...\n ', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
+
+        f = Figure(figsize=(10,5), dpi=100)
+        a = f.add_subplot(111)
+        a.plot([1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960,
+                1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976,
+                1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992,
+                1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                2009, 2010],
+               [5500000, 5500000, 5430000, 5420000, 5425032, 5433200, 5503020, 5500030,
+                5435476, 5365343, 5322342, 5433454, 5762638, 5626379, 5533450, 5505032,
+                5325374, 5229382, 5332534, 5442435, 5632436, 5225356, 5354252, 5543344,
+                5544345, 5533453, 5433453, 5335344, 5345473, 5222223, 5199872, 5203002,
+                5102293, 5100330, 5093929, 5022332, 4999221, 4922322, 4822828, 4789800,
+                4733723, 4636364, 4444323, 4478779, 4422302, 4122321, 3999212, 4002293,
+                3888182, 3772373, 3642069, 3444333, 3220032, 3002230, 2883292, 2992283,
+                3322332, 3441422, 3322332, 2993828, 2777283, 2633543, 2339862, 2122039,
+                2100293, 2003993], 'g')
+
+        title = "Bee Population Decline Since 1945 (Bee Hives In Millions)"
+        a.set_title(title)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
         button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialThree))
         button1.pack()
 
@@ -141,27 +191,46 @@ class FirstDay(tk.Frame):
 class SecondLabel(tk.Frame, Algorithms):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        Algorithms.__init__(self)
         label = tk.Label(self, text='Well lay out some basic options first...', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        label2 = tk.Label(self, text='Oh No! There are rats running rampant in your house. How many litres pesticide '
+        label2 = tk.Label(self, text='Oh No! There are snails everywhere in your garden!!. How many litres pesticide '
                                       'do you use?\n 1. To Kill none and have to stomp on them all 2. '
                                      'To Kill half and '
                                       'stomp on a few or 3. Kill all and have no problems\n', font=MEDIUM)
         label2.pack()
         amount = tk.Entry(self)
         amount.pack()
-        button1 = ttk.Button(self, text="Enter", command=lambda: self.showLabel(amount, button1, label, label2))
+        button1 = ttk.Button(self, text="Enter", command=lambda: self.showLabel(amount, button1, label,
+                                                                                label2, controller))
         button1.pack()
 
-    def showLabel(self, amount, button1, label, label2):
+    def showLabel(self, amount, button1, label, label2, controller):
         amount1 = int(amount.get())
         amount.destroy()
         button1.destroy()
         label.destroy()
         label2.destroy()
-        label3 = tk.Label(self, text=Algorithms.pesticde1(self, amountofpesticide=amount1), font=LARGE_FONT)
+        rate3 = str(Algorithms.pesticde1(self, amountofpesticide=amount1)), '%'
+        label4 = tk.Label(self, text='The current rate at which the bees are populating is:\n', font=LARGE_FONT)
+        label4.pack()
+        label3 = tk.Label(self, text=rate3, font=MEDIUM)
         label3.pack()
+        button2 = ttk.Button(self, text="Next Day", command=lambda: controller.show_frame(SecondDay))
+        button2.pack()
 
+
+class SecondDay(tk.Frame, Algorithms):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        Algorithms.__init__(self)
+        button1 = tk.Button(self, text='Next', command=lambda: self.showPop(button1))
+        button1.pack()
+
+    def showPop(self, button1):
+        button1.destroy()
+        label = tk.Label(self, text='The Current Bee Population is:\n' + str(tick(self)), font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
 
 app = BeeSimGui()
 app.mainloop()
