@@ -12,6 +12,9 @@ def tick(self):
     beePop = beePop * rate
     return beePop
 
+def popupmsg():
+
+    pass
 
 class Algorithms():
 
@@ -43,9 +46,13 @@ class Algorithms():
 
         return rate
 
-    def fundingVirus(self):
+    def Charity(self, amountmoney):
+        global rate
+        rate1 = amountmoney * 0.00010092
+        rate = rate + rate1
+        return rate
 
-        pass
+
     def save(self):
 
         with open('BeePopNumbers.txt', 'w') as pop:
@@ -60,7 +67,6 @@ from matplotlib.figure import Figure
 from matplotlib import style
 import matplotlib.animation as animation
 
-
 LARGE_FONT= ("Verdana", 20)
 MEDIUM= ("Verdana", 16)
 style.use('ggplot')
@@ -74,19 +80,21 @@ class BeeSimGui(tk.Tk):
 
         container.pack(side="top", fill="both", expand=True)
 
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        container.grid_rowconfigure(3, weight=1)
+        container.grid_columnconfigure(3, weight=1)
 
         self.frames = {}
 
         for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel,
-                  SecondDay):
+                  SecondDay, SecondDay1):
 
             frame = F(container, self)
 
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
+
+            frame.configure(background='#00A3E0')
 
         self.show_frame(StartPage)
 
@@ -100,11 +108,16 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="BEE SIMULATION GAME!!", font=LARGE_FONT)
+
+        label = tk.Label(self, text="THIS PROGRAM IS IN ALPHA STAGE 1\n"
+                                    "YOU USE THIS PROGRAM WITH THE KNOWLEDGE THAT IT IS ST"
+                                    "UPIDLY BASIC AND NOT EVEN CLOSE TO DONE.", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Press to start!", command=lambda:controller.show_frame(TutorialOne))
+        button1 = ttk.Button(self, text="Agree", command=lambda:controller.show_frame(TutorialOne))
         button1.pack()
+        button2 = ttk.Button(self, text="Disagree", command=lambda: quit())
+        button2.pack()
 
 
 class TutorialOne(tk.Frame):
@@ -154,6 +167,7 @@ class TutorialTwo(tk.Frame):
         button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialThree))
         button1.pack()
 
+
 class TutorialThree(tk.Frame):
     def __init__(self, parent, controller):
         time.sleep(2)
@@ -167,6 +181,7 @@ class TutorialThree(tk.Frame):
         button1 = ttk.Button(self, text="Next", command=lambda: controller.show_frame(TutorialFour))
         button1.pack()
 
+
 class TutorialFour(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -176,12 +191,14 @@ class TutorialFour(tk.Frame):
         button1 = ttk.Button(self, text="Start Game", command=lambda: controller.show_frame(FirstDay))
         button1.pack()
 
+
 class FirstDay(tk.Frame):
 
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
-        label1 = tk.Label(self, text='Welcome to your first day. At this early in the game you will have a limited amount of options you can'
+        label1 = tk.Label(self, text='Welcome to your first day. At this early in the game you will have a limited '
+                                     'amount of options you can'
               ' choose from...\n', font=LARGE_FONT)
         label1.pack(pady=10, padx=10)
         button1 = ttk.Button(self, text="Okay, Got It", command=lambda: controller.show_frame(SecondLabel))
@@ -195,9 +212,10 @@ class SecondLabel(tk.Frame, Algorithms):
         label = tk.Label(self, text='Well lay out some basic options first...', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
         label2 = tk.Label(self, text='Oh No! There are snails everywhere in your garden!!. How many litres pesticide '
-                                      'do you use?\n 1. To Kill none and have to stomp on them all 2. '
-                                     'To Kill half and '
-                                      'stomp on a few or 3. Kill all and have no problems\n', font=MEDIUM)
+                                      'do you use?\n 0. To Kill none and have to stomp on them all 1. '
+                                     'To Kill some and '
+                                      'stomp on a most\n2. To Kill most and stomp on some'
+                                     ' 3. Kill all and have no problems\n', font=MEDIUM)
         label2.pack()
         amount = tk.Entry(self)
         amount.pack()
@@ -224,13 +242,48 @@ class SecondDay(tk.Frame, Algorithms):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         Algorithms.__init__(self)
-        button1 = tk.Button(self, text='Next', command=lambda: self.showPop(button1))
+        button1 = tk.Button(self, text='Next', command=lambda: self.showPop(button1, controller))
         button1.pack()
 
-    def showPop(self, button1):
+    def showPop(self, button1, controller):
         button1.destroy()
         label = tk.Label(self, text='The Current Bee Population is:\n' + str(tick(self)), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
+        button1 = tk.Button(self, text='Next', command=lambda: self.nextDay(label, button1, controller))
+        button1.pack()
+
+    def nextDay(self, label, button1, controller):
+        label.destroy()
+        button1.destroy()
+        label1 = tk.Label(self, text='Congratulations on completing your first day!\nToday will be a bit different to '
+                                     'the first as You\'ll have several new options to input!', font=LARGE_FONT)
+        label1.pack()
+        button2 = tk.Button(self, text='Okay', command=lambda: controller.show_frame(SecondDay1))
+        button2.pack()
+
+
+class SecondDay1(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label1 = tk.Label(self, text="First Up, Enter your donation to www.wheenbeefoundation.org.au\n"
+                                     "Min 0, Max 100,000. No dollar signs or commas", font=LARGE_FONT)
+        label1.pack()
+        donation = tk.Entry(self)
+        donation.pack()
+        button1 = tk.Button(self, text="Okay", command=lambda: self.showPop(controller, label1, donation, button1))
+        button1.pack()
+
+    def showPop(self, controller, label1, donation, button1):
+        money = int(donation.get())
+        label1.destroy()
+        donation.destroy()
+        button1.destroy()
+
+        rate3 = Algorithms.Charity(self, amountmoney=int(money)), '%'
+        label4 = tk.Label(self, text='The current rate at which the bees are populating is:\n', font=LARGE_FONT)
+        label4.pack()
+        label3 = tk.Label(self, text=rate3, font=LARGE_FONT)
+        label3.pack()
 
 app = BeeSimGui()
 app.mainloop()
