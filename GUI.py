@@ -12,9 +12,16 @@ def tick(self):
     beePop = beePop * rate
     return beePop
 
-def popupmsg():
+def popupmsg(msg):
 
-    pass
+    popupwindow = tk.Tk()
+    popupwindow.wm_title('!')
+    label = ttk.Label(popupwindow, text=msg)
+    label.pack(side='top', fill='x', pady=10)
+    b1 = tk.Button(popupwindow, text='Okay', command=lambda: popupwindow.destroy())
+    b1.pack()
+    popupwindow.mainloop()
+
 
 class Algorithms():
 
@@ -48,11 +55,25 @@ class Algorithms():
 
     def Charity(self, amountmoney):
         global rate
-        rate1 = amountmoney * 0.00010092
+        rate1 = amountmoney * 0.000050092
         rate = rate + rate1
         return rate
 
-
+    def typeHoney(self, ChosenHoney):
+        global rate
+        if ChosenHoney == str('Calipino'):
+            rate1 = 0.00221
+            rate = rate + rate1
+        elif ChosenHoney == str('Coles Home Brand'):
+            rate1 = 0.082237
+            rate = rate - rate1
+        elif ChosenHoney == str('Australian Honey Brand'):
+            rate1 = 0.033323
+            rate = rate - rate1
+        elif ChosenHoney == str('Manuku Honey New Zealand'):
+            rate1 = 0.011232
+            rate = rate + rate1
+        return rate
     def save(self):
 
         with open('BeePopNumbers.txt', 'w') as pop:
@@ -86,7 +107,7 @@ class BeeSimGui(tk.Tk):
         self.frames = {}
 
         for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel,
-                  SecondDay, SecondDay1):
+                  SecondDay, SecondDay1, ThirdDay1):
 
             frame = F(container, self)
 
@@ -109,14 +130,13 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="THIS PROGRAM IS IN ALPHA STAGE 1\n"
-                                    "YOU USE THIS PROGRAM WITH THE KNOWLEDGE THAT IT IS ST"
-                                    "UPIDLY BASIC AND NOT EVEN CLOSE TO DONE.", font=LARGE_FONT)
+        label = tk.Label(self, text="THIS SIMULATION IS EARLY ALPHA 0.3.1. This is a stable stage "
+                                    "of which you have 3 different days to work with...\n", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Agree", command=lambda:controller.show_frame(TutorialOne))
+        button1 = tk.Button(self, text="Agree", command=lambda:controller.show_frame(TutorialOne))
         button1.pack()
-        button2 = ttk.Button(self, text="Disagree", command=lambda: quit())
+        button2 = tk.Button(self, text="Disagree", command=lambda: quit())
         button2.pack()
 
 
@@ -127,7 +147,7 @@ class TutorialOne(tk.Frame):
                "WELCOME TO THE BEE SIMULATION!!     \n"
                "##############################################", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialTwo))
+        button1 = tk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialTwo))
         button1.pack()
 
 
@@ -164,7 +184,7 @@ class TutorialTwo(tk.Frame):
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        button1 = ttk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialThree))
+        button1 = tk.Button(self, text="Next", command=lambda:controller.show_frame(TutorialThree))
         button1.pack()
 
 
@@ -178,7 +198,7 @@ class TutorialThree(tk.Frame):
                                     'things you have'
                ' access to\n', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = ttk.Button(self, text="Next", command=lambda: controller.show_frame(TutorialFour))
+        button1 = tk.Button(self, text="Next", command=lambda: controller.show_frame(TutorialFour))
         button1.pack()
 
 
@@ -188,7 +208,7 @@ class TutorialFour(tk.Frame):
         label = tk.Label(self, text='Based on those desicions, the bee population will decline / rise in number\n\n'
                                     'Lets Begin!!!!', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = ttk.Button(self, text="Start Game", command=lambda: controller.show_frame(FirstDay))
+        button1 = tk.Button(self, text="Start Game", command=lambda: controller.show_frame(FirstDay))
         button1.pack()
 
 
@@ -201,7 +221,7 @@ class FirstDay(tk.Frame):
                                      'amount of options you can'
               ' choose from...\n', font=LARGE_FONT)
         label1.pack(pady=10, padx=10)
-        button1 = ttk.Button(self, text="Okay, Got It", command=lambda: controller.show_frame(SecondLabel))
+        button1 = tk.Button(self, text="Okay, Got It", command=lambda: controller.show_frame(SecondLabel))
         button1.pack()
 
 
@@ -209,7 +229,8 @@ class SecondLabel(tk.Frame, Algorithms):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         Algorithms.__init__(self)
-        label = tk.Label(self, text='Well lay out some basic options first...', font=LARGE_FONT)
+        label = tk.Label(self, text='Well lay out some basic options first. The Decicions you make now will '
+                                    'continue to impact the bee population each \'Tick\'', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
         label2 = tk.Label(self, text='Oh No! There are snails everywhere in your garden!!. How many litres pesticide '
                                       'do you use?\n 0. To Kill none and have to stomp on them all 1. '
@@ -256,7 +277,8 @@ class SecondDay(tk.Frame, Algorithms):
         label.destroy()
         button1.destroy()
         label1 = tk.Label(self, text='Congratulations on completing your first day!\nToday will be a bit different to '
-                                     'the first as You\'ll have several new options to input!', font=LARGE_FONT)
+                                     'the first as You\'ll have a new options to input!\n'
+                                     'Each day you will continue to be able to input', font=LARGE_FONT)
         label1.pack()
         button2 = tk.Button(self, text='Okay', command=lambda: controller.show_frame(SecondDay1))
         button2.pack()
@@ -265,7 +287,8 @@ class SecondDay(tk.Frame, Algorithms):
 class SecondDay1(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label1 = tk.Label(self, text="First Up, Enter your donation to www.wheenbeefoundation.org.au\n"
+        label1 = tk.Label(self, text="Enter your donation to www.wheenbeefoundation.org.au. \n"
+                                     "This website is a way you can contribute to the Colony Collapse Disorder Issue\n"
                                      "Min 0, Max 100,000. No dollar signs or commas", font=LARGE_FONT)
         label1.pack()
         donation = tk.Entry(self)
@@ -284,6 +307,97 @@ class SecondDay1(tk.Frame):
         label4.pack()
         label3 = tk.Label(self, text=rate3, font=LARGE_FONT)
         label3.pack()
+        button2 = tk.Button(self, text='Okay', command=lambda: self.tickDay(label4, label3, button2, controller))
+        button2.pack()
+
+    def tickDay(self, label4, label3, button2, controller):
+
+        label4.destroy()
+        label3.destroy()
+        button2.destroy()
+
+        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5.pack()
+        button3 = tk.Button(self, text="Next", command=lambda: controller.show_frame(ThirdDay1))
+        button3.pack()
+
+
+class ThirdDay1(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label1 = tk.Label(self, text="You're at coles and you have a choice on which brand of honey to buy:\n"
+                                     "1. Calipino - $3.50 2. Coles Home Brand - $1.50\n"
+                                     "3. Honey Australia Brand - $1.20 or 4. Manuku Honey New Zealand - $7.28",
+                          font=LARGE_FONT)
+        label1.pack()
+        ChosenHoney = tk.Entry(self)
+        ChosenHoney.pack()
+        button1 = tk.Button(self, text="Okay", command=lambda: self.showPop(controller, label1, ChosenHoney, button1))
+        button1.pack()
+
+    def showPop(self, controller, label1, ChosenHoney, button1):
+        ChosenBrand = str(ChosenHoney.get())
+        label1.destroy()
+        ChosenHoney.destroy()
+        button1.destroy()
+
+        rate3 = Algorithms.typeHoney(self, ChosenHoney=str(ChosenBrand)), '%'
+        label4 = tk.Label(self, text='The current rate at which the bees are populating is:\n', font=LARGE_FONT)
+        label4.pack()
+        label3 = tk.Label(self, text=rate3, font=LARGE_FONT)
+        label3.pack()
+        button2 = tk.Button(self, text='Okay', command=lambda: self.tickDay(label4, label3, button2, controller))
+        button2.pack()
+
+    def tickDay(self, label4, label3, button2, controller):
+
+        label4.destroy()
+        label3.destroy()
+        button2.destroy()
+
+        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5.pack()
+        button3 = tk.Button(self, text='Okay')
+        button3.pack()
+
+
+class FourthDay1NotDone(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label1 = tk.Label(self, text="You're at coles and you have a choice on which brand of honey to buy:\n"
+                                     "1. Calipino - $3.50 2. Coles Home Brand - $1.50\n"
+                                     "3. Honey Australia Brand - $1.20 or 4. Manuku Honey New Zealand - $7.28",
+                          font=LARGE_FONT)
+        label1.pack()
+        ChosenHoney = tk.Entry(self)
+        ChosenHoney.pack()
+        button1 = tk.Button(self, text="Okay", command=lambda: self.showPop(controller, label1, ChosenHoney, button1))
+        button1.pack()
+
+    def showPop(self, controller, label1, ChosenHoney, button1):
+        ChosenBrand = str(ChosenHoney.get())
+        label1.destroy()
+        ChosenHoney.destroy()
+        button1.destroy()
+
+        rate3 = Algorithms.typeHoney(self, ChosenHoney=str(ChosenBrand)), '%'
+        label4 = tk.Label(self, text='The current rate at which the bees are populating is:\n', font=LARGE_FONT)
+        label4.pack()
+        label3 = tk.Label(self, text=rate3, font=LARGE_FONT)
+        label3.pack()
+        button2 = tk.Button(self, text='Okay', command=lambda: self.tickDay(label4, label3, button2, controller))
+        button2.pack()
+
+    def tickDay(self, label4, label3, button2, controller):
+
+        label4.destroy()
+        label3.destroy()
+        button2.destroy()
+
+        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5.pack()
+        button3 = tk.Button(self, text='Okay')
+        button3.pack()
 
 app = BeeSimGui()
 app.mainloop()
