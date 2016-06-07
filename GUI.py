@@ -1,4 +1,4 @@
-import time
+
 
 rate = 1
 
@@ -6,8 +6,13 @@ with open('BeePopNumbers.txt', 'r') as pop:
     pop = pop.read()
     beePop = int(pop)
 
+# def save():
+#
+#     with open('BeePopNumbers.txt', 'w') as pop:
+#         pop = pop.write(beePop)
 
-def tick(self):
+
+def tick():
     global beePop
     beePop = beePop * rate
     return beePop
@@ -95,11 +100,6 @@ class Algorithms():
             popupmsg(msg='INVALID SELECTION')
         return rate
 
-    def save(self):
-
-        with open('BeePopNumbers.txt', 'w') as pop:
-            pop = pop.write(beePop)
-
 import tkinter as tk
 from tkinter import ttk
 import matplotlib
@@ -128,7 +128,7 @@ class BeeSimGui(tk.Tk):
         self.frames = {}
 
         for F in (StartPage, TutorialOne, TutorialTwo, TutorialThree, TutorialFour, FirstDay, SecondLabel,
-                  SecondDay, SecondDay1, ThirdDay1, FourthDay1):
+                  SecondDay, SecondDay1, ThirdDay1, FourthDay1, endOfInvestigationTemp):
 
             frame = F(container, self)
 
@@ -174,7 +174,6 @@ class TutorialOne(tk.Frame):
 
 class TutorialTwo(tk.Frame):
     def __init__(self, parent, controller):
-        time.sleep(2)
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text='Before we begin, lets have a quick tutorial! \n\n'
                'This simulation is designed to mimic that of the decline in real life, which is effecting us in ways '
@@ -211,7 +210,6 @@ class TutorialTwo(tk.Frame):
 
 class TutorialThree(tk.Frame):
     def __init__(self, parent, controller):
-        time.sleep(2)
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text='As each day passes the bee population decreases further and further.\n '
                                     'In our virtual world, '
@@ -289,7 +287,7 @@ class SecondDay(tk.Frame, Algorithms):
 
     def showPop(self, button1, controller):
         button1.destroy()
-        label = tk.Label(self, text='The Current Bee Population is:\n' + str(tick(self)), font=LARGE_FONT)
+        label = tk.Label(self, text='The Current Bee Population is:\n' + str(tick()), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
         button1 = tk.Button(self, text='Next', command=lambda: self.nextDay(label, button1, controller))
         button1.pack()
@@ -337,7 +335,7 @@ class SecondDay1(tk.Frame):
         label3.destroy()
         button2.destroy()
 
-        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5 = tk.Label(self, text=int(tick()), font=LARGE_FONT)
         label5.pack()
         button3 = tk.Button(self, text="Next", command=lambda: controller.show_frame(ThirdDay1))
         button3.pack()
@@ -376,7 +374,7 @@ class ThirdDay1(tk.Frame):
         label3.destroy()
         button2.destroy()
 
-        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5 = tk.Label(self, text=int(tick()), font=LARGE_FONT)
         label5.pack()
         button3 = tk.Button(self, text='Next', command=lambda: controller.show_frame(FourthDay1))
         button3.pack()
@@ -390,29 +388,27 @@ class FourthDay1(tk.Frame):
                                      'crops!\nYou consider using pesticide that will kill the locusts ho'
                                      'wever you know there are bee colonies around you\n who are very unstab'
                                      'le due to Colony Collapse Disorder. \nYou Have Two options to chose from: '
-                                     'Which brand pesticide you use and how many hundreds of litres you use!',
-                          font=LARGE_FONT)
-        label1.pack()
-        label2 = tk.Label(self, text='\nYou have 4 options to choose from: \n'
+                                     'Which brand pesticide you use and how many hundreds of litres you use! \n'
+                                     'You have 4 options to choose from: \nYou have 4 options to choose from: '
                                      '1. Mortein Large Scale 2. Bayer Advanced\n'
-                                    '3. Home Depot Brand 4. Lowe\'s Brand', font=LARGE_FONT)
-        label2.pack()
+                                     '3. Home Depot Brand 4. Lowe\'s Brand\n', font=LARGE_FONT)
 
-        chosenBrand = tk.Entry(self)
-        chosenBrand.pack()
 
-        button1 = tk.Button(self, text="Okay", command=lambda: self.showPop(controller,
-                                                                            label1, label2, button1, chosenBrand))
+        label1.pack()
+
+        ChosenHoney = tk.Entry(self)
+        ChosenHoney.pack()
+        button1 = tk.Button(self, text="Okay", command=lambda: self.showPop(controller, label1,
+                                                                            ChosenHoney, button1))
         button1.pack()
 
-    def showPop(self, controller, label1, button1, label2, chosenBrand):
-
+    def showPop(self, controller, label1, ChosenHoney, button1):
+        ChosenBrand = str(ChosenHoney.get())
         label1.destroy()
+        ChosenHoney.destroy()
         button1.destroy()
-        label2.destroy()
-        chosenBrand.destroy()
 
-        rate3 = Algorithms.farm1(self, brand=str(chosenBrand.get())), '%'
+        rate3 = Algorithms.farm1(self, brand=str(ChosenBrand)), '%'
         label4 = tk.Label(self, text='The current rate at which the bees are populating is:\n', font=LARGE_FONT)
         label4.pack()
         label3 = tk.Label(self, text=rate3, font=LARGE_FONT)
@@ -426,11 +422,27 @@ class FourthDay1(tk.Frame):
         label3.destroy()
         button2.destroy()
 
-        label5 = tk.Label(self, text=tick(self), font=LARGE_FONT)
+        label5 = tk.Label(self, text=int(tick()), font=LARGE_FONT)
         label5.pack()
-        button3 = tk.Button(self, text='Okay')
+        button3 = tk.Button(self, text='Okay', command=lambda: controller.show_frame(endOfInvestigationTemp))
         button3.pack()
 
+
+class endOfInvestigationTemp(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        Label1 = tk.Label(self, text='Congratulations on completing the game so far!\n\n', )
+        Label1.pack()
+        button2 = tk.Button(self, text='Okay', command=lambda: self.tickDay(button2, Label1, controller))
+        button2.pack()
+
+    def tickDay(self, button2, label1, controller):
+        label1.destroy()
+        button2.destroy()
+        label5 = tk.Label(self, text=int(tick()), font=LARGE_FONT)
+        label5.pack()
+        button3 = tk.Button(self, text='Okay', command=lambda: quit())
+        button3.pack()
 
 # class FifthDay1(tk.Frame):
 #     def __init__(self, parent, controller):
